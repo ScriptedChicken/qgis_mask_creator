@@ -246,13 +246,16 @@ class MaskCreator:
         output = res["OUTPUT"]
         print('fixgeometries')
 
-        res = processing.run("native:dissolve", {
-            'INPUT': output,\
-            'FIELD': None,\
-            'OUTPUT': "TEMPORARY_OUTPUT"
-        })
+        if output.featureCount() > 1:
+            res = processing.run("native:dissolve", {
+                'INPUT': output,\
+                'FIELD': None,\
+                'OUTPUT': "TEMPORARY_OUTPUT"
+            })
 
-        self.featureBuffer = res["OUTPUT"]
+            self.featureBuffer = res["OUTPUT"]
+        else:
+            self.featureBuffer = output
 
         # create mask
         self.loadMask()
